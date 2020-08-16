@@ -1,6 +1,15 @@
+"""Installation required"""
+#pip install mysql-connector-python(compulsory)
+#pip install stdiomask
+#pip install tqdm
+#open your database server -> import sample.sql to the database
+
 import mysql.connector
 import stdiomask
+import time
 from datetime import datetime
+from progress import loader
+
 
 """LOGIN AND REGISTRATION OF USER AND ADMIN  WITH VALIDATION AND CHECKING----------------------------------------------------------------------"""
 
@@ -69,11 +78,11 @@ def register_login():
     print("-----------------------------------")
     print("WELCOME TO USER REGISTRATION")
     print("PRESS 0 TO DISCONTINUE AND 1 TO PROCEED ")
-    permission=raw_input("ENTER YOUR CHOICE : ")
+    permission=input("ENTER YOUR CHOICE : ")
     if(permission=='1'):
         print("-----------------------------------")
         print("CREATE YOUR USER ACCOUNT ")
-        name = raw_input("ENTER NAME : ")
+        name = input("ENTER NAME : ")
         print("CREATE YOUR USER PASSWORD")
         password = stdiomask.getpass(prompt="ENTER PASSWORD : ")
         proceed=validate(name,password)
@@ -97,10 +106,10 @@ def user_login():
     print("+------------------WELCOME TO USER LOGIN------------------+")
     print("|---------------------------------------------------------|")
     print("+          PRESS 0 TO DISCONTINUE AND 1 TO PROCEED        +")
-    permission=raw_input("                 ENTER YOUR CHOICE : ")
+    permission=input("                 ENTER YOUR CHOICE : ")
     if(permission=='1'):
         print("|---------------------------------------------------------|")
-        name = raw_input("              ENTER NAME : ")
+        name = input("              ENTER NAME : ")
         password = stdiomask.getpass(prompt="              ENTER PASSWORD : ")
         print("|---------------------------------------------------------|")
         check_login(name,password)
@@ -120,10 +129,10 @@ def user_login():
 def admin_login():
     print("|              WELCOME TO ADMIN LOGIN              |\n+--------------------------------------------------+")
     print("     PRESS 0 TO DISCONTINUE AND 1 TO PROCEED ")
-    permission=raw_input("     ENTER YOUR CHOICE : ")
+    permission=input("     ENTER YOUR CHOICE : ")
     print("+--------------------------------------------------+")
     if(permission=='1'):
-        name = raw_input("     ENTER NAME : ")
+        name = input("     ENTER NAME : ")
         password = stdiomask.getpass(prompt="     ENTER PASSWORD : ")
         print("+--------------------------------------------------+")
         check_adlogin(name,password)
@@ -146,7 +155,7 @@ def admin_panel(name):
     print("| SALES ANALYSIS : Press 'S' to View Sales        |")
     print("|         LOGOUT : Press 'L' to Logout            |")
     print("+-------------------------------------------------+")
-    command=raw_input("ENTER COMMAND : ")
+    command=input("ENTER COMMAND : ")
     print("+-------------------------------------------------+")
     if(command=='V' or command=='v'):
         view_stock(name,1,0)
@@ -186,13 +195,13 @@ def view_stock(name,type,id):
     print("Search Stock : Press 'S' ")
     print("      Logout : Press 'L' ")    
     print("        Back : Press any button ")
-    ch=raw_input("Enter your Choice : ")
+    ch=input("Enter your Choice : ")
     print("------------------------------------------------------------------------------------------------")
     if(ch=='l' or ch=='L'):
         print("         **  Lougout Succesfully **")
         main()
     elif(ch=='S' or ch=='s'):
-        search=raw_input("ENTER THE FOOD NUMBER : ")
+        search=input("ENTER THE FOOD NUMBER : ")
         mycursor.execute("Select * from stock_table where num = %s",(search,))
         display = mycursor.fetchall()
         count = mycursor.rowcount
@@ -221,18 +230,18 @@ def view_stock(name,type,id):
 def add_stock(name):
     print('--------------------ADD STOCK-----------------------')
     print("PRESS 0 TO DISCONTINUE AND 1 TO PROCEED ")
-    permission=raw_input("ENTER YOUR CHOICE : ")
+    permission=input("ENTER YOUR CHOICE : ")
     print("       ------------------------------------")
     if(permission=='1'):
         mydb = mysql.connector.connect(host="localhost", user="root",password="",database="sample")
         mycursor = mydb.cursor()
-        f_num=raw_input("  FOOD NUMBER : ")
+        f_num=input("  FOOD NUMBER : ")
         mycursor.execute("Select * from stock_table where num = %s",(f_num,))
         check=mycursor.fetchall()
         if(not check):
-            f_name=raw_input("  FOOD NAME : ")
+            f_name=input("  FOOD NAME : ")
             print("1-> South Indian\t2-> North Indian\t3-> Chinese\tAny other key->Continental")
-            f_type=raw_input("  FOOD TYPE : ")
+            f_type=input("  FOOD TYPE : ")
             if(f_type=='1'):
                 f_type="South Indian"
             elif(f_type=='2'):
@@ -241,8 +250,8 @@ def add_stock(name):
                 f_type="Chinese"
             else:
                 f_type="Continental"
-            f_price=int(raw_input("  FOOD PRICE : "))
-            f_stock=int(raw_input("  FOOD STOCK : "))
+            f_price=int(input("  FOOD PRICE : "))
+            f_stock=int(input("  FOOD STOCK : "))
             mydb = mysql.connector.connect(host="localhost", user="root",password="",database="sample")
             mycursor = mydb.cursor()
             sql_val = "Insert into stock_table(num, name, type, price, quantity) values(%s,%s,%s,%s,%s)"
@@ -269,17 +278,17 @@ def update_stock(name):
         print("{}\t\t\t{}\t\t\t{}\t\t\t{}\t\t\t{}".format(x[1],x[2],x[3],x[4],x[5]))
     print("------------------------------------------------------------------")
     print("PRESS 0 TO DISCONTINUE AND 1 TO PROCEED ")
-    permission=raw_input("ENTER YOUR CHOICE : ")
+    permission=input("ENTER YOUR CHOICE : ")
     print("------------------------------------------------------------------")
     if(permission=='1'):
-        f_num=raw_input("  FOOD NUMBER : ")
+        f_num=input("  FOOD NUMBER : ")
         mycursor.execute("Select * from stock_table where num = %s",(f_num,))
         check=mycursor.fetchall()
         if(check):
-            new_num=raw_input("  SET FOOD NUMBER : ")
-            f_name=raw_input("FOOD NAME : ")
+            new_num=input("  SET FOOD NUMBER : ")
+            f_name=input("FOOD NAME : ")
             print("1-> South Indian\t2-> North Indian\n3-> Chinese\tAny other key->Continental")
-            f_type=raw_input("  FOOD TYPE : ")
+            f_type=input("  FOOD TYPE : ")
             if(f_type=='1'):
                 f_type="South Indian"
             elif(f_type=='2'):
@@ -288,8 +297,8 @@ def update_stock(name):
                 f_type="Chinese"
             else:
                 f_type="Continental"
-            f_price=int(raw_input("  FOOD PRICE : "))
-            f_stock=int(raw_input("  FOOD STOCK : "))
+            f_price=int(input("  FOOD PRICE : "))
+            f_stock=int(input("  FOOD STOCK : "))
             mydb = mysql.connector.connect(host="localhost", user="root",password="",database="sample")
             mycursor = mydb.cursor()
             sql_val = "Update stock_table set num=%s , name=%s , type=%s , price=%s, quantity=%s where num=%s"
@@ -309,12 +318,12 @@ def update_stock(name):
 def del_stock(name):
     print('-------------------------DELETE STOCK-----------------------------')
     print("     PRESS 0 TO DISCONTINUE AND 1 TO PROCEED ")
-    permission=raw_input("      ENTER YOUR CHOICE : ")
+    permission=input("      ENTER YOUR CHOICE : ")
     print("------------------------------------------------------------------")
     if(permission=='1'):
         mydb = mysql.connector.connect(host="localhost", user="root",password="",database="sample")
         mycursor = mydb.cursor()
-        del_num=raw_input("Enter the food number that you want to delete : ")
+        del_num=input("Enter the food number that you want to delete : ")
         del_num=del_num.upper()
         mycursor.execute("Select * from stock_table where num = %s",(del_num,))
         check=mycursor.fetchall()
@@ -341,7 +350,7 @@ def view_sales(name):
             print(" {}\t|\t{}\t|\t{}\t|\t{}\t|\t{}\t|\t{}\t|\t{} ".format(col[3],col[4],col[5],col[6],col[7],col[8],col[2]))   
         print("-----------------------------------------------------------------------------------------------------------------------------------")
         print("              DAILY SALES : PRESS 'D' \n              BACK : ANY OTHER CHARACTER")
-        back = raw_input("              ENTER YOUR CHOICE : ")
+        back = input("              ENTER YOUR CHOICE : ")
         if(back.upper()=='D'):
             print("\n---------------FOOD-BOX DAILY SALES---------------\n")
             mycursor.execute("Select date(date) as date, sum(quantity) as total_sales, sum(amount) as income from sales_table group by date")
@@ -379,7 +388,7 @@ def user_panel(name,id):
     print("|   ORDERCONFIRM : Press C to Confirm Order    |")
     print("|         LOGOUT : Press L to logout           |")
     print("+----------------------------------------------+")
-    command=raw_input("ENTER COMMAND : ")
+    command=input("ENTER COMMAND : ")
     print("+----------------------------------------------+")
     if(command=='S' or command=='s'):
          view_stock(name,0,id)
@@ -423,7 +432,7 @@ def view_cart(name,id):
     print("         ADD TO CART : PRESS 'A' ")
     print("    REMOVE FROM CART : PRESS 'R' ")
     print("RETURN TO USER PANEL : PRESS ANY OTHER BUTTON")
-    choice = raw_input("   ENTER YOUR CHOICE : ")
+    choice = input("   ENTER YOUR CHOICE : ")
     if(choice.upper()=='A'):
         add_cart(name,id)
     elif(choice.upper()=='R'):
@@ -443,10 +452,10 @@ def add_cart(name,id):
         print("{}\t\t\t{}\t\t\t{}\t\t\t{}\t\t\t{}".format(x[1],x[2],x[3],x[4],x[5]))
     print("\n------------------------------------------------------------------")
     print("PRESS 0 TO DISCONTINUE AND 1 TO PROCEED ")
-    permission=raw_input("ENTER YOUR CHOICE : ")
+    permission=input("ENTER YOUR CHOICE : ")
     print("+---------------------------------------------------------+")
     if(permission=='1'):
-        f_num=raw_input("FOOD NUMBER : ")
+        f_num=input("FOOD NUMBER : ")
         mycursor.execute("Select * from stock_table where num = %s",(f_num,))
         check=mycursor.fetchall()
         if(check):
@@ -454,7 +463,7 @@ def add_cart(name,id):
             left=check[0][5]
             cost=check[0][4]
             print("{} has only {} stock available".format(dish,left))
-            quantity=int(raw_input("ENTER THE QUANTITY : "))
+            quantity=int(input("ENTER THE QUANTITY : "))
             if(quantity<=left):
                 amt = quantity*cost
                 sql_form = "Insert into user_cart(user_id,item_num,quantity,price) values(%s,%s,%s,%s)"
@@ -492,10 +501,10 @@ def del_cart(name,id):
         print("No item added to cart")
         print("\n------------------------------------------------------------------")
     print("PRESS 0 TO DISCONTINUE AND 1 TO PROCEED ")
-    permission=raw_input("ENTER YOUR CHOICE : ")
+    permission=input("ENTER YOUR CHOICE : ")
     print("+---------------------------------------------------------+")
     if(permission=='1'):
-        f_num=raw_input("FOOD NUMBER : ")
+        f_num=input("FOOD NUMBER : ")
         mycursor.execute("Select * from user_cart where item_num = %s",(f_num,))
         check=mycursor.fetchall()
         if(check):
@@ -525,9 +534,9 @@ def user_order(name,id):
             stock = mycursor.fetchall()
             print("{}\t\t\t{}\t\t\t{}\t\t\t{}\t\t\t{}\t\t\t{}".format(x[2],stock[0][2],stock[0][3],stock[0][4],x[3],x[4]))
         print("\n------------------------------------------------------------------")
-        order=raw_input("ENTER (Yes) TO CONFIRM THE ORDER : ")
+        order=input("ENTER (Yes) TO CONFIRM THE ORDER : ")
         order = order.upper()
-        print(order)
+        loader(50)
         if(order=='YES'):
             mycursor.execute("Select * from user_cart where user_id = %s",(id,))
             myresult = mycursor.fetchall()
@@ -575,10 +584,7 @@ def user_order(name,id):
             time = datetime.now().strftime("%H:%M:%S")
             now = datetime.today().strftime("%d/%m/%Y")
             print("\nINVOICE BILLING : FOOD-BOX\nName : {}\nDate : {}\nTime : {}\nTotal Amount = RS. {}".format(name,date,time,money))
-            print("Bill inserted")
-            mycursor.execute("Insert into ordered(user_id,money,day) values(%s,%s,%s)",(id,money,now))
-            print("Cart deleted")
-            print(id)
+            mycursor.execute("Insert into billing(user_id,money,day) values(%s,%s,%s)",(id,money,now))
             mycursor.execute("Delete from user_cart where user_id = %s",(id,))
             mydb.commit()
             user_panel(name,id)
@@ -591,6 +597,7 @@ def user_order(name,id):
 
 """ Starting of the page -->  Home page -------------------------------------------------------------------------------------------------------"""
 def main():
+    loader(100)
     print("\n+--------------------------------------------------+")
     print("|---------WELCOME TO FOOD BOX SAMLE ENTRY----------|")
     print("|              'BOOST YOUR APPETITE'               |\n+--------------------------------------------------+")
@@ -600,7 +607,7 @@ def main():
     print("|     Exit : Enter X to exit                       |")
     print("| About us : Enter any other key                   |")
     print("+--------------------------------------------------+")
-    val=raw_input("ENTER YOUR CHOICE : ")
+    val=input("ENTER YOUR CHOICE : ")
     print("+--------------------------------------------------+")
     if(val=='A' or val=='a'):
         admin_login()
@@ -609,6 +616,8 @@ def main():
     elif(val=='R' or val=='r'):
         register_login()
     elif(val=='X' or val=='x'):
+        print("             **      THANK   YOU     **")
+        loader(20)
         exit()
     else:
         print("+---------------------------------------------------------+")
@@ -621,4 +630,3 @@ def main():
         print("|   Phone | +91 98353378628                               |")
         print("+---------------------------------------------------------+")
 main()
-
